@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Attendace System</string>
+    <string name="app_name">Attendace</string>
+    <string name="capture_image">Capture</string>
+    <string name="barcode_result">Barcode Result : </string>
 </resources>

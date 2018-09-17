@@ -28,13 +28,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.google.firebase:firebase-auth:16.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:17.0.0'
     implementation('com.github.hotchemi:permissionsdispatcher:3.1.0') {
         exclude module: 'support-v13'
     }
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:3.1.0'
-    implementation 'me.aflak.libraries:ezcam:2.3.3'
-
+    implementation 'com.android.support:design:28.0.0-rc02'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -13,11 +15,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
@@ -27,8 +33,6 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 
 import java.io.File;
 import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 
@@ -42,9 +46,13 @@ public class ScanningMode extends AppCompatActivity {
 
     private Button captureButton;
     ImageView barcodeImage;
+    TextView barcodeValue;
 
     //Declaring Path of the image on External Storage
     private String path = "";
+    private String appFolderPath = "";
+    //Fixed Name for Image
+    String barcode = "barcode-image";
 
 
     @Override
@@ -61,7 +69,9 @@ public class ScanningMode extends AppCompatActivity {
 
        //Firebase Barcode Initialize
         FirebaseVisionBarcodeDetectorOptions options = new FirebaseVisionBarcodeDetectorOptions.Builder()
-                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_CODE_39).build();
+                .setBarcodeFormats(FirebaseVisionBarcode.FORMAT_CODE_39,
+                        FirebaseVisionBarcode.FORMAT_CODE_93,
+                        FirebaseVisionBarcode.FORMAT_CODE_128).build();
 
         //Defining Button and OnClick Action
         captureButton = (Button)findViewById(R.id.capture_image);
@@ -69,13 +79,20 @@ public class ScanningMode extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //Generating Timestamp for naming of image
-                String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String filename = timestamp + ".jpg";
+                // Assigning name to image
+                String filename = barcode + ".jpg";
+
+                //Create Storage folder
+                File appFolder = Environment.getExternalStorageDirectory();
+                appFolderPath = appFolder.getAbsolutePath() + "/" + "Attendance";
+                File appDir = new File(appFolderPath);
+                if(!appDir.exists())
+                    appDir.mkdir();
+
 
                 //Specifyinh the storage Location of the Image
                 File storageDir = Environment.getExternalStorageDirectory();
-                path = storageDir.getAbsolutePath() + "/" + filename;
+                path = appFolderPath + "/" + filename;
                 File file = new File(path);
                 Uri outputFileUri = FileProvider.getUriForFile(ScanningMode.this, BuildConfig.APPLICATION_ID + ".provider",file);
 
@@ -123,8 +140,7 @@ public class ScanningMode extends AppCompatActivity {
                 Bitmap imageBitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
                 ImageView barcodeImage = (ImageView)findViewById(R.id.captured_image);
                 barcodeImage.setImageBitmap(imageBitmap);
-                Toast.makeText(this,"Image Capture Successful",Toast.LENGTH_SHORT).show();
-               // processFirebaseImage(imageBitmap);
+                processFirebaseImage(imageBitmap);
             }
         }
     }
@@ -137,8 +153,28 @@ public class ScanningMode extends AppCompatActivity {
         //Creating Instance Of Firebase Barcode Detector
         FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance().getVisionBarcodeDetector();
 
-        //Detecting Image
-        Task<List<FirebaseVisionBarcode>> result = detector.detectInImage(fireImage);
+        //Detecting Barcodes from Image
+        Task<List<FirebaseVisionBarcode>> result = detector.detectInImage(fireImage).addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
+            @Override
+            public void onSuccess(List<FirebaseVisionBarcode> firebaseVisionBarcodes) {
+                Toast.makeText(ScanningMode.this,"Success!", Toast.LENGTH_SHORT).show();
+
+                //Getting Information from Barcodes
+                for(FirebaseVisionBarcode barcode : firebaseVisionBarcodes){
+                    Rect bounds = barcode.getBoundingBox();
+                    Point[] corners = barcode.getCornerPoints();
+
+                    String rawValue = barcode.getRawValue();
+                    TextView barcodeValue = (TextView)findViewById(R.id.barcode_value);
+                    barcodeValue.setText(rawValue);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ScanningMode.this,"Something Went Wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

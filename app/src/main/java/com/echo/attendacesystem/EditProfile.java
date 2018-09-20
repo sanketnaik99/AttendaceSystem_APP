@@ -64,7 +64,8 @@ public class EditProfile extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
                     Log.d("ATTENDANCE APP", "onComplete: User Details Updated");
-                    startActivity(new Intent(EditProfile.this,HomeActivity.class));
+                    EditProfile.this.setResult(R.string.edit_profile_result);
+                    EditProfile.this.finish();
                 }
             }
         });

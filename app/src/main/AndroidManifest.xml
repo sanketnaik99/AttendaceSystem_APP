@@ -27,7 +27,9 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +39,8 @@
         <activity android:name=".ScanningMode" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".EditProfile" />
-        <activity android:name=".AddUser"></activity>
+        <activity android:name=".AddUser" />
+        <activity android:name=".LectureDetails"></activity>
     </application>
 
 </manifest>

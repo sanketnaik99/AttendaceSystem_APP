@@ -3,4 +3,5 @@
     <string name="capture_image">Capture</string>
     <string name="barcode_result_name">Barcode Result : </string>
     <string name="barcode_result">None</string>
+    <string name="edit_profile_result">PROFILE_EDITED</string>
 </resources>

@@ -1,10 +1,17 @@
 package com.echo.attendacesystem;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,9 +22,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
+
+@RuntimePermissions
 public class LectureDetails extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private Button dateButton, startTimeButton, endTimeButton;
@@ -51,7 +67,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         dateText.setText(dateResult);
 
         //ADD Date to Attendance Manager Class
-        attendanceManager.lectureDate = dateResult;
+        AttendanceManagement.lectureDate = dateResult;
     }
 
     //TimePicker Dialog Which gets the Time after a user selects the time
@@ -74,7 +90,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
                 id = "";
 
                 //Add Start Time to Attendance Manager Class
-                attendanceManager.lectureStartTime = startTime;
+                AttendanceManagement.lectureStartTime = startTime;
                 break;
 
             case ("END_TIME_SELECT"):
@@ -83,7 +99,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
                 id = "";
 
                 //Add Start Time to Attendance Manager Class
-                attendanceManager.lectureEndTime = endTime;
+                AttendanceManagement.lectureEndTime = endTime;
                 break;
         }
     }
@@ -130,11 +146,65 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         timePicker.show(getSupportFragmentManager(), "Start Time Picker");
     }
 
-    public void pushData(View v){
+
+
+
+    public void startScanning(View v){
 
         //GET data from Subject Dropdown
-        attendanceManager.lectureSubject = subjects.getSelectedItem().toString();
+        AttendanceManagement.lectureSubject = subjects.getSelectedItem().toString();
 
         attendanceManager.logData();
+
+        LectureDetailsPermissionsDispatcher.openCameraWithPermissionCheck(this);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result!=null){
+            if (result.getContents() == null){
+                Toast.makeText(this,"Could Not Scan Barcode", Toast.LENGTH_LONG).show();
+            }else{
+                AttendanceManagement.currentStudent = result.getContents();
+                startActivity(new Intent(LectureDetails.this, ScanningMode.class));
+            }
+        }else{
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
+    //Get CAMERA PERMISSION
+    @NeedsPermission(Manifest.permission.CAMERA)
+    void openCamera() {
+        IntentIntegrator scanner = new IntentIntegrator(this);
+        scanner.setPrompt("please scan your ID card");
+        scanner.setBeepEnabled(true);
+        scanner.setOrientationLocked(true);
+        scanner.initiateScan();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        LectureDetailsPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnShowRationale(Manifest.permission.CAMERA)
+    void cameraRationale(final PermissionRequest request) {
+        new AlertDialog.Builder(this).setMessage("Please Enable Camera Permission").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                request.proceed();
+            }
+        }).setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                request.cancel();
+            }
+        }).show();
     }
 }

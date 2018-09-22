@@ -22,7 +22,7 @@
         <item name="android:headerBackground">@color/colorAccent</item>
         <item name="android:calendarTextColor">@color/white</item>
         <item name="android:background">@color/jetBlack</item>
-        <item name="android:dayOfWeekBackground">@color/colorPrimary</item>
+        <item name="android:dayOfWeekBackground">@color/colorAccent</item>
         <item name="android:yearListSelectorColor">@color/colorAccent</item>
         <item name="android:datePickerMode">calendar</item>    </style>
 

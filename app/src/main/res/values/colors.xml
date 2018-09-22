@@ -6,4 +6,5 @@
     <color name="jetBlack">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="mtrl_textinput_default_box_stroke_color">#fff</color>
+    <color name="errorColor">#ff4444</color>
 </resources>

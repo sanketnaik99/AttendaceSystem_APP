@@ -146,6 +146,24 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         timePicker.show(getSupportFragmentManager(), "Start Time Picker");
     }
 
+    private boolean validate(){
+        boolean valid = true;
+        if(AttendanceManagement.lectureDate.isEmpty()){
+            dateButton.setBackgroundColor(getResources().getColor(R.color.errorColor));
+            valid = false;
+        }
+        if(AttendanceManagement.lectureStartTime.isEmpty()){
+            startTimeButton.setBackgroundColor(getResources().getColor(R.color.errorColor));
+            valid = false;
+        }
+        if(AttendanceManagement.lectureEndTime.isEmpty()){
+            endTimeButton.setBackgroundColor(getResources().getColor(R.color.errorColor));
+            valid = false;
+        }
+
+        return valid;
+    }
+
 
 
 
@@ -156,8 +174,10 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
 
         attendanceManager.logData();
 
-        LectureDetailsPermissionsDispatcher.openCameraWithPermissionCheck(this);
 
+        if(validate()) {
+            LectureDetailsPermissionsDispatcher.openCameraWithPermissionCheck(this);
+        }
     }
 
     @Override

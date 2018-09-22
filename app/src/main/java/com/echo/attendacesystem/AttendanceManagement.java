@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class AttendanceManagement {
 
-    public static String lectureDate, lectureStartTime, lectureEndTime, lectureSubject, studentsList, currentStudent;
+    public static String lectureDate = "", lectureStartTime = "", lectureEndTime = "", lectureSubject = "", studentsList, currentStudent;
     public int studentCount;
 
     String TAG = "ATTENDANCE APP";

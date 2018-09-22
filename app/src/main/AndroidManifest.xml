@@ -4,14 +4,12 @@
     package="com.echo.attendacesystem">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    
-
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -42,14 +40,14 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".EditProfile" />
         <activity android:name=".AddUser" />
-        <activity android:name=".LectureDetails"/>
-
+        <activity android:name=".LectureDetails" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/zxing_CaptureTheme"
             android:stateNotNeeded="true"
-            tools:replace="android:screenOrientation"/>
+            android:theme="@style/zxing_CaptureTheme"
+            tools:replace="android:screenOrientation" />
+        <activity android:name=".LectureSummary"></activity>
     </application>
 
 </manifest>

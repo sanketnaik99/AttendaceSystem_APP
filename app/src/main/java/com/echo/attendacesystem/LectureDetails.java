@@ -65,6 +65,10 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         dateResult = DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
         dateResult = dateResult.replace("/","-");
         dateText.setText(dateResult);
+        AttendanceManagement.lectureMonth = DateFormat.getDateInstance(DateFormat.MONTH_FIELD).format(c.getTime());
+        AttendanceManagement.lectureWeek = c.get(Calendar.WEEK_OF_YEAR);
+
+        Log.d("ATTENDANCE MANAGER", "onDateSet: " + AttendanceManagement.lectureMonth + "  "  + AttendanceManagement.lectureWeek + "  " + AttendanceManagement.lectureDay);
 
         //ADD Date to Attendance Manager Class
         AttendanceManagement.lectureDate = dateResult;
@@ -146,6 +150,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         timePicker.show(getSupportFragmentManager(), "Start Time Picker");
     }
 
+    //Validate if All Fields have been marked
     private boolean validate(){
         boolean valid = true;
         if(AttendanceManagement.lectureDate.isEmpty()){
@@ -165,21 +170,18 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
     }
 
 
-
-
+    //Method to Start barcode Scanner
     public void startScanning(View v){
 
         //GET data from Subject Dropdown
         AttendanceManagement.lectureSubject = subjects.getSelectedItem().toString();
-
-        attendanceManager.logData();
-
 
         if(validate()) {
             LectureDetailsPermissionsDispatcher.openCameraWithPermissionCheck(this);
         }
     }
 
+    //Get Barcode Scan Data and Update Data and UI
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -189,6 +191,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
                 Toast.makeText(this,"Could Not Scan Barcode", Toast.LENGTH_LONG).show();
             }else{
                 AttendanceManagement.currentStudent = result.getContents();
+                AttendanceManagement.studentsList = result.getContents();
                 startActivity(new Intent(LectureDetails.this, ScanningMode.class));
             }
         }else{

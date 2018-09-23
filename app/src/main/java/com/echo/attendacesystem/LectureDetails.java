@@ -65,10 +65,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         dateResult = DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
         dateResult = dateResult.replace("/","-");
         dateText.setText(dateResult);
-        AttendanceManagement.lectureMonth = DateFormat.getDateInstance(DateFormat.MONTH_FIELD).format(c.getTime());
         AttendanceManagement.lectureWeek = c.get(Calendar.WEEK_OF_YEAR);
-
-        Log.d("ATTENDANCE MANAGER", "onDateSet: " + AttendanceManagement.lectureMonth + "  "  + AttendanceManagement.lectureWeek + "  " + AttendanceManagement.lectureDay);
 
         //ADD Date to Attendance Manager Class
         AttendanceManagement.lectureDate = dateResult;
@@ -95,6 +92,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
 
                 //Add Start Time to Attendance Manager Class
                 AttendanceManagement.lectureStartTime = startTime;
+                AttendanceManagement.lectureStartTime_RAW = hourOfDay + "-" + minute;
                 break;
 
             case ("END_TIME_SELECT"):
@@ -104,6 +102,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
 
                 //Add Start Time to Attendance Manager Class
                 AttendanceManagement.lectureEndTime = endTime;
+                AttendanceManagement.lectureEndTime_RAW = hourOfDay + "-" + minute;
                 break;
         }
     }
@@ -192,6 +191,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
             }else{
                 AttendanceManagement.currentStudent = result.getContents();
                 AttendanceManagement.studentsList = result.getContents();
+                AttendanceManagement.studentCount = 1;
                 startActivity(new Intent(LectureDetails.this, ScanningMode.class));
             }
         }else{

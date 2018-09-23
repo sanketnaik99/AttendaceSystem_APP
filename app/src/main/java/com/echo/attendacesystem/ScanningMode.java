@@ -73,6 +73,7 @@ public class ScanningMode extends AppCompatActivity {
                   barcodeValue.setText(AttendanceManagement.currentStudent  + " Already Marked");
                 }else {
                     AttendanceManagement.studentsList += "," + AttendanceManagement.currentStudent;
+                    AttendanceManagement.studentCount += 1;
                     barcodeValue.setText(AttendanceManagement.currentStudent);
                 }
                 Log.d("ATTENDANCE MANAGER", "onActivityResult: " + AttendanceManagement.studentsList);

@@ -65,8 +65,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
         dateResult = DateFormat.getDateInstance(DateFormat.SHORT).format(c.getTime());
         dateResult = dateResult.replace("/","-");
         dateText.setText(dateResult);
-        AttendanceManagement.lectureWeek = c.get(Calendar.WEEK_OF_YEAR);
-
+        AttendanceManagement.lectureWeek = Integer.toString(c.get(Calendar.WEEK_OF_YEAR));
         //ADD Date to Attendance Manager Class
         AttendanceManagement.lectureDate = dateResult;
     }

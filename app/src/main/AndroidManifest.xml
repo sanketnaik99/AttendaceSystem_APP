@@ -47,7 +47,8 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             tools:replace="android:screenOrientation" />
-        <activity android:name=".LectureSummary"></activity>
+        <activity android:name=".LectureSummary" />
+        <activity android:name=".LectureAnalysis"></activity>
     </application>
 
 </manifest>

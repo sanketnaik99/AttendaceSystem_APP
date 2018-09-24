@@ -48,7 +48,9 @@
             android:theme="@style/zxing_CaptureTheme"
             tools:replace="android:screenOrientation" />
         <activity android:name=".LectureSummary" />
-        <activity android:name=".LectureAnalysis"></activity>
+        <activity android:name=".LectureAnalysis" />
+
+        <activity android:name=".SplashScreen"></activity>
     </application>
 
 </manifest>

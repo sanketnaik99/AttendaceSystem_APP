@@ -6,14 +6,25 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:allowBackup="true"
-        android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <provider
+           android:allowBackup="true"
+           android:hardwareAccelerated="true"
+           android:icon="@mipmap/ic_launcher"
+           android:label="@string/app_name"
+           android:roundIcon="@mipmap/ic_launcher_round"
+           android:supportsRtl="true"
+           android:theme="@style/AppTheme"
+            tools:ignore="RtlEnabled">
+
+         <activity android:name=".SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+         </activity>
+
+
+         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
@@ -21,36 +32,29 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
-        </provider>
+         </provider>
 
-        <meta-data
+         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity
+         <activity
             android:name=".LoginActivity"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ScanningMode" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".EditProfile" />
-        <activity android:name=".AddUser" />
-        <activity android:name=".LectureDetails" />
-        <activity
+            android:noHistory="true"/>
+         <activity android:name=".ScanningMode" />
+         <activity android:name=".HomeActivity" />
+         <activity android:name=".EditProfile" />
+         <activity android:name=".AddUser" />
+         <activity android:name=".LectureDetails" />
+         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             tools:replace="android:screenOrientation" />
-        <activity android:name=".LectureSummary" />
-        <activity android:name=".LectureAnalysis" />
+         <activity android:name=".LectureSummary" />
+         <activity android:name=".LectureAnalysis" />
 
-        <activity android:name=".SplashScreen"></activity>
     </application>
 
 </manifest>

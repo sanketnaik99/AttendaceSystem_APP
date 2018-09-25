@@ -15,7 +15,8 @@
            android:theme="@style/AppTheme"
             tools:ignore="RtlEnabled">
 
-         <activity android:name=".SplashScreen">
+         <activity android:name=".SplashScreen"
+             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

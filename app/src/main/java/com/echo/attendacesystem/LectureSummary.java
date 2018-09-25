@@ -1,6 +1,7 @@
 package com.echo.attendacesystem;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +48,7 @@ public class LectureSummary extends AppCompatActivity {
 
     //Firebase Auth Object
     private FirebaseAuth mAuth;
+    private static String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,7 @@ public class LectureSummary extends AppCompatActivity {
             lecture.put("Subject", AttendanceManagement.lectureSubject);
             lecture.put("Date", lectureDate);
             lecture.put("StartTime", AttendanceManagement.lectureStartTime);
+            lecture.put("StartTime_RAW",AttendanceManagement.lectureStartTime_RAW);
             lecture.put("EndTime",AttendanceManagement.lectureEndTime);
             lecture.put("StudentsPresent",AttendanceManagement.studentsList);
             lecture.put("StudentCount",AttendanceManagement.studentCount);
@@ -131,11 +134,12 @@ public class LectureSummary extends AppCompatActivity {
             //Initialize Firebase Auth Object and get Current User's Mail
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = mAuth.getCurrentUser();
-            final String email = currentUser.getEmail();
+            email = currentUser.getEmail();
+            lecture.put("User", email);
             publishProgress(40);
 
             //Get the Weeks Data From Firebase
-            db.collection(email).document("Weeks").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            db.collection("Lectures").document("Weeks").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if(task.isSuccessful()){
@@ -160,8 +164,7 @@ public class LectureSummary extends AppCompatActivity {
             });
 
             //Publish Lecture Data to Firebase
-            db.collection(email).document(lectureDate)
-                    .collection(lectureDate).document(lectureStartTime_RAW + "-" + lectureEndTime_RAW).set(lecture).addOnSuccessListener(new OnSuccessListener<Void >() {
+            db.collection("Lectures").document(lectureDate + "-" + lectureStartTime_RAW + "-" + lectureEndTime_RAW).set(lecture).addOnSuccessListener(new OnSuccessListener<Void >() {
                 @Override
                 public void onSuccess(Void  avoid) {
                     Log.d(TAG, "DocumentSnapshot written with ID: ");
@@ -198,6 +201,7 @@ public class LectureSummary extends AppCompatActivity {
             Toast.makeText(LectureSummary.this, s, Toast.LENGTH_SHORT).show();
             progressBar.setProgress(0);
             progressBar.setVisibility(View.INVISIBLE);
+            startActivity(new Intent(getApplicationContext(),HomeActivity.class));
         }
 
         private void updateWeeks(FirebaseFirestore db, String email){
@@ -206,7 +210,7 @@ public class LectureSummary extends AppCompatActivity {
             weeksData.put("Weeks", weeksOnDatabase);
 
             //Publish weeks data to firebase
-            db.collection(email).document("Weeks").set(weeksData).addOnSuccessListener(new OnSuccessListener<Void>() {
+            db.collection("Lectures").document("Weeks").set(weeksData).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "onSuccess: Success");

@@ -42,6 +42,11 @@ public class HomeActivity extends AppCompatActivity {
         startActivityForResult(new Intent(HomeActivity.this,EditProfile.class), 0);
     }
 
+    //Go to Lecture Analysis
+    public void lectureAnalysis(View v){
+        startActivity(new Intent(HomeActivity.this,LectureAnalysis.class));
+    }
+
     //Get the Edit Profile Result and Update the UI
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

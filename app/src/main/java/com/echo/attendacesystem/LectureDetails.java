@@ -43,7 +43,7 @@ public class LectureDetails extends AppCompatActivity implements DatePickerDialo
 
     private String id;
 
-    private String[] subjectList = new String[]{ "AM-3", "DS", "OOPM", "DM", "ECCF" };
+    private String[] subjectList = new String[]{ "AM-3", "DS", "OOPM", "DM", "ECCF", "DLDA" };
 
     private AttendanceManagement attendanceManager = new AttendanceManagement();
 

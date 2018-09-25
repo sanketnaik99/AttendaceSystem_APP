@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="weeks_spinner">
+        <item>Please select an option</item>
+    </string-array>
+    <string-array name="subject_spinner">
+        <item>Please select a subject</item>
+    </string-array>
+</resources>

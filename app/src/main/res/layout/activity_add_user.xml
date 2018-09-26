@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Add User"
-        android:textColor="@color/jetBlack"
+        android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
         android:typeface="normal"

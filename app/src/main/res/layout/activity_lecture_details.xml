@@ -40,6 +40,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="Date"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Date" />
@@ -51,6 +52,7 @@
             android:layout_weight="1"
             android:onClick="dateSelect"
             android:text="Select Date"
+            android:textColor="#000000"
             tools:text="Select Date" />
     </LinearLayout>
 
@@ -73,6 +75,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="Start Time"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -104,6 +107,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="End Time"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -135,6 +139,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:text="Subject"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 

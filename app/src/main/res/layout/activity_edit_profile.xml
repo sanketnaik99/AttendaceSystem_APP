@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditProfile">
+    android:background="@color/colorPrimaryDark"
+    tools:context=".EditProfile"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/textView"
@@ -14,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Edit Profile"
-        android:textColor="@color/jetBlack"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textStyle="bold"
         android:typeface="normal"

@@ -74,9 +74,10 @@ public class LectureAnalysis extends AppCompatActivity {
 
         weekSpinner = findViewById(R.id.week_spinner);
 
+        dataSeries = new LineGraphSeries<>();
+
         graph = findViewById(R.id.graph);
         graph.setVisibility(View.INVISIBLE);
-        dataSeries = new LineGraphSeries<>();
         graph.getGridLabelRenderer().setVerticalAxisTitle("Number of Students Present");
         graph.getGridLabelRenderer().setHorizontalAxisTitle("Lecture Date and Time");
         graph.getViewport().setXAxisBoundsManual(true);
@@ -290,6 +291,7 @@ public class LectureAnalysis extends AppCompatActivity {
             progressBar2.setVisibility(View.INVISIBLE);
             graph.addSeries(dataSeries);
             graph.setVisibility(View.VISIBLE);
+            go.setVisibility(View.INVISIBLE);
         }
     }
 }

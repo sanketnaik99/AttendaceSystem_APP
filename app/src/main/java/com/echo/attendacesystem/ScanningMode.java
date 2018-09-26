@@ -50,6 +50,7 @@ public class ScanningMode extends AppCompatActivity {
         String student = AttendanceManagement.currentStudent;
         AttendanceManagement.studentsList = AttendanceManagement.studentsList.replaceFirst(","+student, "");
         Toast.makeText(this,"Student with ID " + student + " Deleted Successfully", Toast.LENGTH_SHORT).show();
+        AttendanceManagement.studentCount = AttendanceManagement.studentCount -1;
     }
 
     //Method to Start barcode scanner

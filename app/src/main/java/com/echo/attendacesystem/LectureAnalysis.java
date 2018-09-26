@@ -22,6 +22,9 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,17 @@ public class LectureAnalysis extends AppCompatActivity {
     private static final String TAG = "LectureAnalysis";
     private List<String> weeks = new ArrayList<String>();
     private String[] subjectList = new String[]{ "ALL", "AM-3", "DS", "OOPM", "DM", "ECCF", "DLDA" };
+
+    private List<Float> dayCount = new ArrayList<>();
+    private List<Float> studentCount = new ArrayList<>();
+    private static String[] dateLabel;
+
+    private static int counter;
+    private float count;
+
+    private LineGraphSeries dataSeries;
+
+    GraphView graph;
 
     Query query;
 
@@ -59,6 +73,21 @@ public class LectureAnalysis extends AppCompatActivity {
         go.setActivated(false);
 
         weekSpinner = findViewById(R.id.week_spinner);
+
+        graph = findViewById(R.id.graph);
+        graph.setVisibility(View.INVISIBLE);
+        dataSeries = new LineGraphSeries<>();
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Number of Students Present");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Lecture Date and Time");
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(1);
+        graph.getViewport().setMaxX(9);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(20);
+
+
+
 
         //Spinner Content
         subjectSpinner = findViewById(R.id.subject_spinner);
@@ -87,6 +116,7 @@ public class LectureAnalysis extends AppCompatActivity {
             super.onPreExecute();
             progressBar2.setProgress(0);
             progressBar2.setVisibility(View.VISIBLE);
+            go.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -160,7 +190,7 @@ public class LectureAnalysis extends AppCompatActivity {
 
             progressBar2.setProgress(0);
             progressBar2.setVisibility(View.INVISIBLE);
-            go.setActivated(true);
+            go.setVisibility(View.VISIBLE);
         }
     }
 
@@ -180,7 +210,7 @@ public class LectureAnalysis extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().setTimestampsInSnapshotsEnabled(true).build();
             db.setFirestoreSettings(settings);
-            publishProgress(20);
+            publishProgress(25);
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
@@ -190,7 +220,7 @@ public class LectureAnalysis extends AppCompatActivity {
             mAuth = FirebaseAuth.getInstance();
             FirebaseUser user = mAuth.getCurrentUser();
             String email = user.getEmail();
-            publishProgress(40);
+            publishProgress(50);
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {
@@ -200,16 +230,43 @@ public class LectureAnalysis extends AppCompatActivity {
             CollectionReference lectureCollection = db.collection("Lectures");
 
             if(strings[1].equals("ALL")){
-                query = lectureCollection.whereEqualTo("Week", strings[0]).orderBy("Date",Query.Direction.DESCENDING).orderBy("StartTime", Query.Direction.DESCENDING);
+                query = lectureCollection.whereEqualTo("Week", strings[0]).orderBy("Date",Query.Direction.ASCENDING).orderBy("StartTime", Query.Direction.ASCENDING);
             }else{
-                query = lectureCollection.whereEqualTo("Week",strings[0]).whereEqualTo("Subject", strings[1]).orderBy("Date",Query.Direction.DESCENDING).orderBy("StartTime",Query.Direction.DESCENDING);
+                query = lectureCollection.whereEqualTo("Week",strings[0]).whereEqualTo("Subject", strings[1]).orderBy("Date",Query.Direction.ASCENDING).orderBy("StartTime",Query.Direction.ASCENDING);
             }
             query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    count = 1;
                     for(QueryDocumentSnapshot document : queryDocumentSnapshots){
                         Log.d(TAG, "onSuccess: " + document.getData());
+                        int student_Count_INT = document.getData().get("StudentCount").hashCode();
+                        float student_Count_FLOAT = student_Count_INT;
+                        studentCount.add(student_Count_FLOAT);
+                        dayCount.add(count);
+                        Log.d(TAG, "onSuccess: " + studentCount + dayCount);
+                        count++;
                     }
+                    publishProgress(75);
+                    try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d(TAG, "doInBackground: RUNNING LOOP");
+                    counter=0;
+                    while (counter<studentCount.size()){
+                        dataSeries.appendData(new DataPoint(dayCount.get(counter),studentCount.get(counter)),false,40);
+                        Log.d(TAG, "doInBackground: " + dataSeries);
+                        counter +=1;
+                    }
+                    publishProgress(100);
+                    try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -217,12 +274,6 @@ public class LectureAnalysis extends AppCompatActivity {
                     Log.d(TAG, "onFailure: TASK FAILED" + e) ;
                 }
             });
-            publishProgress(60);
-            try {
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             return "SUCCESS";
         }
@@ -236,6 +287,9 @@ public class LectureAnalysis extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            progressBar2.setVisibility(View.INVISIBLE);
+            graph.addSeries(dataSeries);
+            graph.setVisibility(View.VISIBLE);
         }
     }
 }

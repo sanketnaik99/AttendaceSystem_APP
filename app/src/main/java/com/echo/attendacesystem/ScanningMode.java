@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class ScanningMode extends AppCompatActivity {
 
     TextView barcodeValue;
+    ImageButton deleteButton;
 
     //Disable Back Button
     @Override
@@ -40,6 +42,14 @@ public class ScanningMode extends AppCompatActivity {
     //Initialize All Views
     private void initviews(){
         barcodeValue = findViewById(R.id.barcode_result);
+        deleteButton = findViewById(R.id.deletebutton);
+    }
+
+    //Method to remove student
+    public void deleteStudent(View v){
+        String student = AttendanceManagement.currentStudent;
+        AttendanceManagement.studentsList = AttendanceManagement.studentsList.replaceFirst(","+student, "");
+        Toast.makeText(this,"Student with ID " + student + " Deleted Successfully", Toast.LENGTH_SHORT).show();
     }
 
     //Method to Start barcode scanner

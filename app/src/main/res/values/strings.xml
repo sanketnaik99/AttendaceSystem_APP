@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Attendace</string>
     <string name="edit_profile_result">PROFILE_EDITED</string>
-    <string name="amh">Attendance Manager</string>
+    <string name="amh">Attendance\nManager</string>
 </resources>
